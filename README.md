@@ -264,6 +264,13 @@ add key=PQV list=xvr value="LjRcyvTpvdwE2DV-s7rUGVotLw1LNHH3cPCHnBlRXgJ7aGpImVv-
 
 :anger:
 Контейнер будет использовать только локальный DNS сервер на IP адресе 172.18.20.5. Необходимо разрешить DNS запросы TCP/UDP порт 53 на данный IP в правилах RouterOS в разделе ```/ip firewall filter```
+Указанные правила должны быть выше запрещающих. 
+```
+/ip firewall filter
+add chain=input in-interface=docker-xray-vless-veth src-address=172.18.20.6 dst-address=172.18.20.5 protocol=udp dst-port=53 action=accept comment="container -> local DNS (UDP/53)"
+add chain=input in-interface=docker-xray-vless-veth src-address=172.18.20.6 dst-address=172.18.20.5 protocol=tcp dst-port=53 action=accept comment="container -> local DNS (TCP/53)"
+```
+
 
 8) Запускаем контейнер через WinBox в разделе меню Winbox "container". В логах MikroTik вы увидите характерные сообщения о запуске контейнера. 
 
