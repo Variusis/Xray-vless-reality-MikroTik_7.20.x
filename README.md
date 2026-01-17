@@ -72,7 +72,7 @@ add list=RFC6890 address=255.255.255.255 comment="Limited Broadcast";
 Добавим правила в mangle для address-list "RFC6890" и переместим его в самый верх правил
 ```
 /ip firewall mangle
-add action=accept chain=prerouting dst-address-list=RFC1918 in-interface-list=!WAN
+add action=accept chain=prerouting dst-address-list=RFC6890 in-interface-list=!WAN
 ```
 
 Добавим правило транзитного трафика в mangle для address-list "to_vpn"
