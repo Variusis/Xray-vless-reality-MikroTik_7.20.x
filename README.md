@@ -45,15 +45,31 @@ add disabled=no fib name=r_to_vpn
 /ip firewall address-list
 add address=8.8.8.8 list=to_vpn
 ```
-Добавим address-list "RFC1918" что бы не потерять доступ до RouterOS при дальнейшей настройке
+Добавим address-list "RFC6890" что бы не потерять доступ до RouterOS при дальнейшей настройке
 ```
-/ip firewall address-list
-add address=10.0.0.0/8 list=RFC1918
-add address=172.16.0.0/12 list=RFC1918
-add address=192.168.0.0/16 list=RFC1918
+/ip firewall address-list;
+add list=RFC6890 address=0.0.0.0/8 comment="This host on this network";
+add list=RFC6890 address=10.0.0.0/8 comment="Private-Use";
+add list=RFC6890 address=100.64.0.0/10 comment="Shared Address Space";
+add list=RFC6890 address=127.0.0.0/8 comment="Loopback";
+add list=RFC6890 address=169.254.0.0/16 comment="Link Local";
+add list=RFC6890 address=172.16.0.0/12 comment="Private-Use";
+add list=RFC6890 address=192.0.0.0/24 comment="IETF Protocol Assignments";
+add list=RFC6890 address=192.0.0.0/29 comment="DS-Lite";
+add list=RFC6890 address=192.0.2.0/24 comment="Documentation (TEST-NET-1)";
+add list=RFC6890 address=192.88.99.0/24 comment="6to4 Relay Anycast";
+add list=RFC6890 address=192.168.0.0/16 comment="Private-Use";
+add list=RFC6890 address=198.18.0.0/15 comment="Benchmarking";
+add list=RFC6890 address=198.51.100.0/24 comment="Documentation (TEST-NET-2)";
+add list=RFC6890 address=203.0.113.0/24 comment="Documentation (TEST-NET-3)";
+add list=RFC6890 address=240.0.0.0/4 comment="Reserved";
+add list=RFC6890 address=255.255.255.255 comment="Limited Broadcast";
+/;
+
+
 ```
 
-Добавим правила в mangle для address-list "RFC1918" и переместим его в самый верх правил
+Добавим правила в mangle для address-list "RFC6890" и переместим его в самый верх правил
 ```
 /ip firewall mangle
 add action=accept chain=prerouting dst-address-list=RFC1918 in-interface-list=!WAN
